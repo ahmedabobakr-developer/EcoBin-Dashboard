@@ -1,0 +1,190 @@
+<div class="table-container" [class.has-sticky-header]="stickyHeader()">
+  <div class="table-scroll">
+    <table class="data-table" [attr.aria-label]="ariaLabel()">
+      <thead [class.is-sticky]="stickyHeader()">
+        <tr>
+          @if (selectable()) {
+            <th class="th-select" scope="col">
+              <app-checkbox
+                [checked]="allSelected()"
+                [indeterminate]="isIndeterminate()"
+                [disabled]="loading() || displayData().length === 0"
+                (checkedChange)="toggleSelectAll($event)"
+              />
+            </th>
+          }
+
+          @for (col of columns(); track col.key) {
+            <th
+              scope="col"
+              [class]="
+                'th-cell align-' + (col.align || 'left') + (col.sortable ? ' is-sortable' : '')
+              "
+              [style.width]="col.width || 'auto'"
+              [attr.aria-sort]="getAriaSort(col)"
+            >
+              @if (col.sortable) {
+                <button
+                  type="button"
+                  class="th-sort-btn"
+                  (click)="handleSort(col)"
+                  [attr.aria-label]="
+                    'Sort by ' +
+                    col.label +
+                    ', ' +
+                    (internalSortColumn() === col.key && internalSortDir() === 'asc'
+                      ? 'sorted ascending'
+                      : internalSortColumn() === col.key && internalSortDir() === 'desc'
+                        ? 'sorted descending'
+                        : 'not sorted')
+                  "
+                >
+                  <span>{{ col.label }}</span>
+                  <span class="sort-indicator" aria-hidden="true">
+                    @if (internalSortColumn() === col.key && internalSortDir() === 'asc') {
+                      <app-icon name="arrow-up" size="xs" />
+                    } @else if (internalSortColumn() === col.key && internalSortDir() === 'desc') {
+                      <app-icon name="arrow-down" size="xs" />
+                    } @else {
+                      <app-icon name="chevron-down" size="xs" class="sort-inactive" />
+                    }
+                  </span>
+                </button>
+              } @else {
+                <div class="th-content">
+                  <span>{{ col.label }}</span>
+                </div>
+              }
+            </th>
+          }
+
+          @if (actions().length > 0) {
+            <th class="th-actions align-right" scope="col">{{ actionsLabel() }}</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (loading()) {
+          @for (i of [1, 2, 3, 4]; track i) {
+            <tr class="tr-loading">
+              @if (selectable()) {
+                <td class="td-cell">
+                  <app-skeleton variant="rectangular" width="16px" height="16px" />
+                </td>
+              }
+              @for (col of columns(); track col.key) {
+                <td class="td-cell"><app-skeleton variant="text" width="80%" height="1rem" /></td>
+              }
+              @if (actions().length > 0) {
+                <td class="td-cell">
+                  <app-skeleton variant="rectangular" width="48px" height="24px" />
+                </td>
+              }
+            </tr>
+          }
+        } @else if (displayData().length === 0) {
+          <tr>
+            <td [attr.colspan]="columnCount()" class="td-empty">
+              <app-empty-state
+                icon="search"
+                [title]="emptyTitle()"
+                [description]="emptyDescription()"
+              />
+            </td>
+          </tr>
+        } @else {
+          @for (row of displayData(); track getRowKey(row)) {
+            <tr
+              class="tr-row"
+              [class.is-selected]="isRowSelected(row)"
+              [class.is-clickable]="rowClickable()"
+              [attr.tabindex]="rowClickable() ? 0 : null"
+              [attr.role]="rowClickable() ? 'button' : null"
+              (click)="handleRowClick(row)"
+              (keydown)="handleRowKeyDown($event, row)"
+            >
+              @if (selectable()) {
+                <td
+                  class="td-select"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
+                >
+                  <app-checkbox
+                    [checked]="isRowSelected(row)"
+                    (checkedChange)="toggleSelectRow(row)"
+                  />
+                </td>
+              }
+
+              @for (col of columns(); track col.key) {
+                <td
+                  [class]="
+                    'td-cell align-' + (col.align || 'left') + (col.nowrap ? ' is-nowrap' : '')
+                  "
+                >
+                  @if (templateMap().get(col.key); as customTpl) {
+                    <ng-container
+                      [ngTemplateOutlet]="customTpl"
+                      [ngTemplateOutletContext]="{
+                        $implicit: row,
+                        row: row,
+                        column: col.key,
+                        index: $index,
+                      }"
+                    />
+                  } @else if (col.type === 'badge') {
+                    <app-badge [variant]="resolveBadgeVariant(col, row)" size="sm" [dot]="true">
+                      {{ getCellValue(row, col) }}
+                    </app-badge>
+                  } @else {
+                    <span class="cell-text" [class.is-number]="col.type === 'number'">
+                      {{ getCellValue(row, col) }}
+                    </span>
+                  }
+                </td>
+              }
+
+              @if (actions().length > 0) {
+                <td
+                  class="td-actions align-right"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
+                >
+                  <div class="row-actions-group">
+                    @for (act of actions(); track act.id) {
+                      @if (isActionVisible(act, row)) {
+                        <app-icon-button
+                          [icon]="act.icon"
+                          [variant]="act.variant || 'ghost'"
+                          size="sm"
+                          [title]="resolveActionAriaLabel(act, row)"
+                          [ariaLabel]="resolveActionAriaLabel(act, row)"
+                          [disabled]="isActionDisabled(act, row)"
+                          (clicked)="handleAction(act.id, row)"
+                        />
+                      }
+                    }
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showPagination() && totalCount() !== 0) {
+    <div class="table-footer">
+      <app-pagination
+        [page]="internalPage()"
+        [pageSize]="pageSize()"
+        [total]="totalCount()"
+        [currentCount]="displayData().length"
+        [disabled]="loading()"
+        (pageChange)="handlePageChange($event)"
+      />
+    </div>
+  }
+</div>

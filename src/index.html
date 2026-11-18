@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EcoBin Admin</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EcoBin Web Admin — Management portal for smart waste recycling bins, fleet operations, ledger auditing, and rewards catalog.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#009966">
+  <script>
+    (function () {
+      try {
+        var storageKey = 'app-theme-preference';
+        var saved = localStorage.getItem(storageKey);
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = saved === 'dark' || (!saved && prefersDark);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+          meta.setAttribute('content', isDark ? '#0A101F' : '#009966');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="brand/ecobin-mark.svg">
+</head>
+<body>
+  <noscript>
+    <div style="padding: 2rem; font-family: system-ui, sans-serif; text-align: center; color: #b91c1c;">
+      <h2>JavaScript Required</h2>
+      <p>This application requires JavaScript to run. Please enable JavaScript in your browser settings to access the EcoBin Admin Portal.</p>
+    </div>
+  </noscript>
+  <app-root></app-root>
+</body>
+</html>

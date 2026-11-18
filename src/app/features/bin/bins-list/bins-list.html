@@ -1,0 +1,226 @@
+<div class="bins-page">
+  <!-- Page Header -->
+  <app-page-header
+    title="Bins list"
+    [subtitle]="headerSubtitle()"
+  >
+    <div page-actions>
+      <app-button
+        variant="primary"
+        (clicked)="openRegisterDrawer()"
+        leadingIcon="plus"
+      >
+        Register bin
+      </app-button>
+    </div>
+  </app-page-header>
+
+  <!-- Filters Toolbar Card -->
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="filter-item search-filter">
+        <app-search-input
+          placeholder="Search by ID, name, area, or collector..."
+          ariaLabel="Search smart bins"
+          [value]="pagedList.filters().search || ''"
+          (valueChange)="handleSearch($event)"
+          (search)="handleSearch($event)"
+        />
+      </div>
+
+      <div class="filter-item">
+        <app-select
+          [options]="districtOptions()"
+          [value]="pagedList.filters().district || ''"
+          placeholder="All districts"
+          ariaLabel="Filter by district"
+          (valueChange)="handleDistrictChange($event)"
+        />
+      </div>
+
+      <div class="filter-item">
+        <app-select
+          [options]="statusOptions()"
+          [value]="pagedList.filters().status || ''"
+          placeholder="All statuses"
+          ariaLabel="Filter by status"
+          (valueChange)="handleStatusChange($event)"
+        />
+      </div>
+
+      <div class="filter-item">
+        <app-select
+          [options]="collectorOptions()"
+          [value]="pagedList.filters().collectorId || ''"
+          placeholder="All collectors"
+          ariaLabel="Filter by collector"
+          (valueChange)="handleCollectorChange($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Table or Error State -->
+  @if (pagedList.error() && pagedList.items().length === 0) {
+    <div class="error-container">
+      <app-resource-state
+        [error]="pagedList.error()"
+        (retry)="pagedList.reload()"
+      />
+    </div>
+  } @else {
+    <div class="table-container">
+      <app-data-table
+        ariaLabel="Smart bins list"
+        [columns]="tableColumns"
+        [data]="pagedList.items()"
+        [loading]="pagedList.refreshing() || pagedList.loading()"
+        mode="server"
+        [page]="pagedList.page()"
+        [pageSize]="pagedList.pageSize()"
+        [total]="pagedList.total()"
+        [sortColumn]="pagedList.sortBy()"
+        [sortDir]="pagedList.sortDir()"
+        [showPagination]="true"
+        (pageChange)="pagedList.setPage($event)"
+        (sortChange)="pagedList.setSort($event.key, $event.dir)"
+        emptyTitle="No smart bins found"
+        emptyDescription="No bins match the selected filter criteria."
+      >
+        <!-- Custom Bin ID Cell Template -->
+        <ng-template appCell="binId" let-row>
+          <app-mono-id-cell [value]="row.binId" />
+        </ng-template>
+
+        <!-- Custom Name & Area Cell Template -->
+        <ng-template appCell="name" let-row>
+          <div class="bin-name-cell">
+            <span class="bin-primary-name">{{ row.name }}</span>
+            <span class="bin-sub-area">{{ row.area }}</span>
+          </div>
+        </ng-template>
+
+        <!-- Custom Fill Level Cell Template -->
+        <ng-template appCell="fillLevel" let-row>
+          <app-fill-level-cell
+            [value]="row.fillLevel"
+            [warningThreshold]="80"
+            [dangerThreshold]="95"
+          />
+        </ng-template>
+
+        <!-- Custom Status Badge Cell Template -->
+        <ng-template appCell="status" let-row>
+          <app-badge
+            [label]="getStatusLabel(row.status)"
+            [variant]="getStatusBadgeVariant(row.status)"
+            [dot]="true"
+          />
+        </ng-template>
+
+        <!-- Custom District Cell Template -->
+        <ng-template appCell="district" let-row>
+          <span class="district-text">{{ row.district }}</span>
+        </ng-template>
+
+        <!-- Custom Collector Cell Template -->
+        <ng-template appCell="collector" let-row>
+          @if (row.collectorId && row.collectorName) {
+            <app-user-cell
+              [name]="row.collectorName"
+              [subtitle]="row.collectorId"
+            />
+          } @else {
+            <span class="unassigned-text">Unassigned</span>
+          }
+        </ng-template>
+
+        <!-- Custom Last Serviced Cell Template -->
+        <ng-template appCell="lastServicedAt" let-row>
+          <span class="timestamp-text">{{ row.lastServicedAt | dateTime }}</span>
+        </ng-template>
+      </app-data-table>
+    </div>
+  }
+
+  <!-- Register Smart Bin Drawer -->
+  <app-drawer
+    [open]="isDrawerOpen()"
+    title="Register Smart Bin"
+    description="Provision a new IoT waste bin on the network with telemetry sensors."
+    size="md"
+    (closed)="closeRegisterDrawer()"
+  >
+    <div class="drawer-content">
+      <form [formGroup]="registerForm" (ngSubmit)="submitRegisterBin()" class="register-form">
+        <div class="form-fields">
+          <div class="form-field-group">
+            <app-input
+              formControlName="deviceSerial"
+              label="Device Serial Number"
+              placeholder="e.g. SN-883492"
+              [required]="true"
+              [error]="serialServerError() || ''"
+            />
+          </div>
+
+          <div class="form-field-group">
+            <app-select
+              formControlName="district"
+              label="District / Area"
+              placeholder="Select a district"
+              [options]="drawerDistrictOptions()"
+              [required]="true"
+            />
+          </div>
+
+          <div class="coordinates-grid">
+            <app-input
+              formControlName="latitude"
+              type="number"
+              label="Latitude"
+              placeholder="30.0444"
+              [required]="true"
+            />
+            <app-input
+              formControlName="longitude"
+              type="number"
+              label="Longitude"
+              placeholder="31.2357"
+              [required]="true"
+            />
+          </div>
+
+          <div class="form-field-group">
+            <app-input
+              formControlName="capacityThresholdKg"
+              type="number"
+              label="Capacity Threshold (kg)"
+              placeholder="120"
+              [required]="true"
+              hint="Maximum rated capacity before triggering maintenance alerts"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div drawer-footer class="drawer-footer-actions">
+      <app-button
+        variant="ghost"
+        (clicked)="closeRegisterDrawer()"
+        [disabled]="isSubmitting()"
+      >
+        Cancel
+      </app-button>
+      <app-button
+        variant="primary"
+        (clicked)="submitRegisterBin()"
+        [loading]="isSubmitting()"
+        [disabled]="registerForm.invalid || isSubmitting()"
+      >
+        Register bin
+      </app-button>
+    </div>
+  </app-drawer>
+</div>

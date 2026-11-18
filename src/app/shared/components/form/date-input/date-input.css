@@ -1,0 +1,58 @@
+:host {
+  display: block;
+}
+
+.date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.date-field {
+  width: 100%;
+  height: 2.5rem;
+  padding-inline-start: 0.875rem;
+  padding-inline-end: 2.25rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--text);
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  outline: none;
+}
+
+.date-field:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
+.date-field:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.date-icon-box {
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+.has-error .date-field {
+  border-color: var(--danger-fg);
+}
+
+.has-error .date-field:focus {
+  border-color: var(--danger-fg);
+  box-shadow: 0 0 0 3px var(--danger-border);
+}
+
+.is-disabled .date-field {
+  background-color: var(--surface-muted);
+  cursor: not-allowed;
+  opacity: 0.65;
+}

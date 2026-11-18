@@ -1,0 +1,52 @@
+<a href="#main-content" class="skip-to-content">Skip to main content</a>
+<div class="sr-only" aria-live="polite" aria-atomic="true">{{ routeAnnouncement() }}</div>
+
+<div class="admin-shell">
+  <!-- Sidebar Container -->
+  <div
+    class="sidebar-wrapper"
+    [class.is-mobile-open]="mobileSidebarOpen()"
+  >
+    @if (mobileSidebarOpen()) {
+      <div class="mobile-backdrop" (click)="closeMobileSidebar()"></div>
+    }
+
+    <div class="sidebar-pane">
+      <app-sidebar
+        [sections]="navSections()"
+        [collapsed]="sidebarCollapsed()"
+        (toggleCollapse)="toggleCollapse()"
+        (linkClicked)="closeMobileSidebar()"
+      />
+    </div>
+  </div>
+
+  <!-- Main Area -->
+  <div class="admin-main">
+    @if (isOffline()) {
+      <div class="offline-banner" role="alert" data-testid="offline-banner">
+        <app-icon name="alert-circle" size="sm" />
+        <span>You are offline — changes can't be saved</span>
+      </div>
+    }
+
+    <app-topbar
+      [notifications]="notifications()"
+      [unreadNotifications]="unreadNotifications()"
+      [userMenuItems]="userMenuItems"
+      [userName]="activeUser()?.name ?? ''"
+      [userRole]="activeUser()?.role ?? ''"
+      [userAvatar]="activeUser()?.avatarUrl || ''"
+      (toggleSidebar)="toggleMobileSidebar()"
+      (notificationClicked)="loadNotifications()"
+      (notificationItemClicked)="handleNotificationItemClick($event)"
+      (notificationsMarkAllRead)="handleNotificationsMarkAllRead()"
+      (userMenuAction)="handleUserMenuAction($event)"
+    />
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1" class="admin-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

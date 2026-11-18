@@ -1,0 +1,383 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-soft: var(--soft);
+  --color-nav: #0f172a;
+  --color-brand: var(--primary);
+}
+
+:root {
+  color-scheme: light;
+
+  /* Semantic Surface Tokens */
+  --surface: #F8FAFC;
+  --surface-raised: #FFFFFF;
+  --surface-muted: #F1F5F9;
+  --surface-sunken: #E2E8F0;
+
+  /* Semantic Border Tokens */
+  --border: #E2E8F0;
+  --border-strong: #64748B;
+
+  /* Semantic Typography Tokens */
+  --text: #0F172A;
+  --text-muted: #475569;
+  --text-inverse: #FFFFFF;
+
+  /* Brand / Primary Tokens */
+  --primary: #007A4D;
+  --primary-soft: rgba(0, 122, 77, 0.12);
+  --primary-strong: #006E47;
+  --primary-fg: #FFFFFF;
+
+  /* Feedback Colors (FG, BG, Border) */
+  --success-fg: #047857;
+  --success-bg: #ECFDF5;
+  --success-border: #A7F3D0;
+
+  --warning-fg: #B45309;
+  --warning-bg: #FFFBEB;
+  --warning-border: #FDE68A;
+
+  --danger-fg: #B91C1C;
+  --danger-bg: #FEF2F2;
+  --danger-border: #FECACA;
+  --danger-strong: #DC2626;
+  --danger-hover: #B91C1C;
+
+  --info-fg: #0369A1;
+  --info-bg: #F0F9FF;
+  --info-border: #BAE6FD;
+
+  --purple-fg: #6D28D9;
+  --purple-bg: #F5F3FF;
+  --purple-border: #DDD6FE;
+
+  /* Functional UI Tokens */
+  --focus-ring: rgba(0, 153, 102, 0.25);
+  --overlay-backdrop: rgba(15, 23, 42, 0.65);
+  --brand-gradient: linear-gradient(135deg, #009966 0%, #047857 100%);
+  --brand-panel-gradient: linear-gradient(145deg, #064E3B 0%, #008556 100%);
+  --brand-panel-fg: #FFFFFF;
+  --glass-chip-bg: rgba(255, 255, 255, 0.15);
+  --glass-chip-border: rgba(255, 255, 255, 0.25);
+  --glass-chip-fg: #FFFFFF;
+  --tooltip-bg: #0F172A;
+  --tooltip-fg: #FFFFFF;
+  --tooltip-border: #334155;
+
+  /* Chart Palette */
+  --chart-1: #009966;
+  --chart-2: #0284C7;
+  --chart-3: #6D28D9;
+  --chart-4: #B45309;
+  --chart-5: #B91C1C;
+  --chart-6: #475569;
+
+  /* Backwards-compatible aliases */
+  --bg: var(--surface);
+  --bg-surface: var(--surface-raised);
+  --bg-muted: var(--surface-muted);
+  --card: var(--surface-raised);
+  --card-hover: var(--surface-muted);
+  --chip-bg: var(--surface-muted);
+  --surface-dark: #0F172A;
+  --ink: var(--text);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-muted);
+  --muted: var(--text-muted);
+  --line: var(--border);
+  --border-subtle: var(--border);
+  --border-default: var(--border-strong);
+  --soft: var(--surface-muted);
+  --brand: var(--primary);
+  --brand-soft: var(--primary-soft);
+  --brand-light: var(--success-bg);
+  --brand-hover: rgba(0, 153, 102, 0.05);
+  --brand-selected: rgba(0, 153, 102, 0.12);
+  --warning: var(--warning-fg);
+  --danger: var(--danger-fg);
+  --danger-ink: var(--danger-fg);
+  --purple: var(--purple-fg);
+  --purple-ink: var(--purple-fg);
+  --info: var(--info-fg);
+  --sidebar-bg: #064E3B;
+  --sidebar-ink: #FFFFFF;
+  --sidebar-muted: #CBD5E1;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.12);
+  --sidebar-active-bg: rgba(255, 255, 255, 0.22);
+  --sidebar-border: rgba(255, 255, 255, 0.16);
+  --auth-bg: #EDF9F3;
+
+  /* Scrollbar tokens */
+  --scrollbar-thumb: rgba(100, 116, 139, 0.35);
+  --scrollbar-thumb-hover: rgba(100, 116, 139, 0.6);
+  --scrollbar-track: transparent;
+  --sidebar-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+  --sidebar-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+
+  /* Brand mark logo tokens */
+  --brand-mark-bg: #009966;
+  --brand-mark-fg: #FFFFFF;
+  --brand-mark-accent: #A7F3D0;
+
+  /* Bin marker tokens */
+  --marker-glyph: var(--text-inverse);
+  --marker-glyph-light: #FFFFFF;
+  --marker-glyph-dark: #0F172A;
+  --marker-pin-outline: rgba(15, 23, 42, 0.45);
+  --marker-pin-shadow: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  --marker-shadow-accent: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Semantic Surface Tokens */
+  --surface: #0A101F;
+  --surface-raised: #111A2E;
+  --surface-muted: #18233A;
+  --surface-sunken: #0E1626;
+
+  /* Semantic Border Tokens */
+  --border: #22304A;
+  --border-strong: #64748B;
+
+  /* Semantic Typography Tokens */
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-inverse: #0F172A;
+
+  /* Brand / Primary Tokens */
+  --primary: #10B981;
+  --primary-soft: rgba(16, 185, 129, 0.16);
+  --primary-strong: #34D399;
+  --primary-fg: #062E24;
+
+  /* Feedback Colors (FG, BG, Border) */
+  --success-fg: #34D399;
+  --success-bg: #092F26;
+  --success-border: #059669;
+
+  --warning-fg: #FCD34D;
+  --warning-bg: #342106;
+  --warning-border: #D97706;
+
+  --danger-fg: #FCA5A5;
+  --danger-bg: #3B1214;
+  --danger-border: #DC2626;
+  --danger-strong: #F87171;
+  --danger-hover: #FCA5A5;
+
+  --info-fg: #38BDF8;
+  --info-bg: #0C2B40;
+  --info-border: #0284C7;
+
+  --purple-fg: #C084FC;
+  --purple-bg: #2E1848;
+  --purple-border: #7C3AED;
+
+  /* Functional UI Tokens */
+  --focus-ring: rgba(16, 185, 129, 0.35);
+  --overlay-backdrop: rgba(0, 0, 0, 0.75);
+  --brand-gradient: linear-gradient(135deg, #064E3B 0%, #065F46 100%);
+  --brand-panel-gradient: linear-gradient(145deg, #031B14 0%, #064E3B 100%);
+  --brand-panel-fg: #F8FAFC;
+  --glass-chip-bg: rgba(255, 255, 255, 0.08);
+  --glass-chip-border: rgba(255, 255, 255, 0.15);
+  --glass-chip-fg: #F8FAFC;
+  --tooltip-bg: #1E293B;
+  --tooltip-fg: #F8FAFC;
+  --tooltip-border: #334155;
+
+  /* Chart Palette */
+  --chart-1: #34D399;
+  --chart-2: #38BDF8;
+  --chart-3: #C084FC;
+  --chart-4: #FCD34D;
+  --chart-5: #FCA5A5;
+  --chart-6: #94A3B8;
+
+  /* Distinct dark mode token values */
+  --surface-dark: #0A101F;
+  --brand-hover: rgba(16, 185, 129, 0.1);
+  --brand-selected: rgba(16, 185, 129, 0.2);
+  --sidebar-bg: #064E3B;
+  --sidebar-ink: #F8FAFC;
+  --sidebar-muted: #CBD5E1;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-active-bg: rgba(16, 185, 129, 0.28);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --auth-bg: #0A101F;
+
+  /* Scrollbar tokens */
+  --scrollbar-thumb: rgba(148, 163, 184, 0.35);
+  --scrollbar-thumb-hover: rgba(148, 163, 184, 0.6);
+  --scrollbar-track: transparent;
+  --sidebar-scrollbar-thumb: rgba(255, 255, 255, 0.25);
+  --sidebar-scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+
+  /* Brand mark logo tokens */
+  --brand-mark-bg: #009966;
+  --brand-mark-fg: #FFFFFF;
+  --brand-mark-accent: #A7F3D0;
+
+  /* Bin marker tokens */
+  --marker-glyph: var(--text-inverse);
+  --marker-glyph-light: #FFFFFF;
+  --marker-glyph-dark: #0F172A;
+  --marker-pin-outline: rgba(15, 23, 42, 0.7);
+  --marker-pin-shadow: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  --marker-shadow-accent: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* ::selection */
+::selection {
+  background-color: var(--primary-soft);
+  color: var(--text);
+}
+
+.dark ::selection {
+  background-color: rgba(16, 185, 129, 0.35);
+  color: var(--text);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Native autofill theme */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px var(--surface-sunken) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slide-in 0.22s ease-out;
+}
+
+.fade-up {
+  animation: fade-up 0.25s ease-out;
+}
+
+/* Prefers-reduced-motion (WCAG 2.2 AA) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible focus indicators (WCAG 2.2 AA - min 3:1 contrast against surface) */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.app-tooltip {
+  position: fixed;
+  z-index: 9999;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  border: 1px solid var(--tooltip-border);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+

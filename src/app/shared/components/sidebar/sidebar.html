@@ -1,0 +1,64 @@
+<aside [class]="'sidebar-root' + (collapsed() ? ' is-collapsed' : '')" aria-label="Main navigation">
+  <!-- Brand Logo Slot -->
+  <div class="sidebar-brand">
+    <div class="brand-logo-box">
+      <ng-content select="[sidebar-logo]">
+        <app-brand-logo [compact]="collapsed()" size="md" />
+      </ng-content>
+    </div>
+  </div>
+
+  <!-- Navigation Sections -->
+  <nav class="sidebar-nav">
+    @for (sec of sections(); track sec.title || $index) {
+      <div class="nav-section">
+        @if (sec.title) {
+          <h2 class="section-title" [attr.aria-hidden]="collapsed()">{{ sec.title }}</h2>
+        }
+
+        <ul class="nav-list">
+          @for (item of sec.items; track item.id) {
+            <li class="nav-list-item">
+              <a
+                class="nav-link"
+                [routerLink]="item.route"
+                routerLinkActive="is-active"
+                #rla="routerLinkActive"
+                [attr.aria-current]="rla.isActive ? 'page' : null"
+                [routerLinkActiveOptions]="{ exact: !!item.exact }"
+                [attr.title]="collapsed() ? item.label : null"
+                [attr.aria-label]="collapsed() ? item.label : null"
+                (click)="handleLinkClick(item)"
+              >
+                <span class="nav-icon" aria-hidden="true">
+                  <app-icon [name]="item.icon" size="sm" />
+                </span>
+
+                <span class="nav-label" [attr.aria-hidden]="collapsed()">{{ item.label }}</span>
+
+                @if (item.badge !== undefined && item.badge !== null && item.badge !== '') {
+                  <span class="nav-count-pill" [attr.aria-hidden]="collapsed()">{{ item.badge }}</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </nav>
+
+  <!-- Collapse Control at Bottom -->
+  <div class="sidebar-footer">
+    <button
+      type="button"
+      class="collapse-btn"
+      (click)="handleToggleCollapse()"
+      [attr.title]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      [attr.aria-expanded]="!collapsed()"
+    >
+      <app-icon [name]="collapsed() ? 'chevron-right' : 'chevron-left'" size="xs" />
+      <span class="collapse-label" [attr.aria-hidden]="collapsed()">Collapse</span>
+    </button>
+  </div>
+</aside>

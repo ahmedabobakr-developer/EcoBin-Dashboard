@@ -1,0 +1,54 @@
+<app-form-field
+  [label]="label()"
+  [forId]="id()"
+  [required]="required()"
+  [hint]="hint()"
+  [error]="effectiveError()"
+  [disabled]="internalDisabled()"
+>
+  <div
+    class="input-wrapper"
+    [class.has-error]="!!effectiveError()"
+    [class.is-disabled]="internalDisabled()"
+  >
+    @if (leadingIcon()) {
+      <div class="input-icon-leading">
+        <app-icon [name]="leadingIcon()!" size="sm" />
+      </div>
+    }
+
+    <input
+      [id]="id()"
+      [type]="actualType()"
+      [value]="internalValue()"
+      [placeholder]="placeholder()"
+      [disabled]="internalDisabled()"
+      [required]="required()"
+      [attr.autocomplete]="autocomplete() || null"
+      [autofocus]="autofocus()"
+      [attr.aria-describedby]="effectiveError() ? (id() + '-error') : (hint() ? (id() + '-hint') : null)"
+      [attr.aria-invalid]="!!effectiveError()"
+      (input)="handleInput($event)"
+      (blur)="handleBlur()"
+      class="input-field"
+      [class.has-leading-icon]="!!leadingIcon()"
+      [class.has-trailing-icon]="!!trailingIcon() || isPassword()"
+    />
+
+    @if (isPassword()) {
+      <button
+        type="button"
+        class="input-icon-trailing-btn"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        [attr.aria-pressed]="showPassword()"
+      >
+        <app-icon [name]="showPassword() ? 'eye-off' : 'eye'" size="sm" />
+      </button>
+    } @else if (trailingIcon()) {
+      <div class="input-icon-trailing">
+        <app-icon [name]="trailingIcon()!" size="sm" />
+      </div>
+    }
+  </div>
+</app-form-field>

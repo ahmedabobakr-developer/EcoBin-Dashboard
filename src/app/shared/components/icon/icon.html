@@ -1,0 +1,58 @@
+<span class="icon-host" [style.width.px]="pixelSize()" [style.height.px]="pixelSize()" aria-hidden="true">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    [attr.stroke]="color()"
+    [attr.stroke-width]="strokeWidth()"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    [style.width.px]="pixelSize()"
+    [style.height.px]="pixelSize()"
+    class="icon-svg"
+  >
+    @for (entry of nodes(); track $index) {
+      @let attrs = entry[1];
+      @switch (entry[0]) {
+        @case ('path') {
+          <svg:path [attr.d]="attrs['d']" />
+        }
+        @case ('circle') {
+          <svg:circle [attr.cx]="attrs['cx']" [attr.cy]="attrs['cy']" [attr.r]="attrs['r']" />
+        }
+        @case ('rect') {
+          <svg:rect
+            [attr.x]="attrs['x']"
+            [attr.y]="attrs['y']"
+            [attr.width]="attrs['width']"
+            [attr.height]="attrs['height']"
+            [attr.rx]="attrs['rx']"
+            [attr.ry]="attrs['ry']"
+          />
+        }
+        @case ('line') {
+          <svg:line
+            [attr.x1]="attrs['x1']"
+            [attr.y1]="attrs['y1']"
+            [attr.x2]="attrs['x2']"
+            [attr.y2]="attrs['y2']"
+          />
+        }
+        @case ('polyline') {
+          <svg:polyline [attr.points]="attrs['points']" />
+        }
+        @case ('polygon') {
+          <svg:polygon [attr.points]="attrs['points']" />
+        }
+        @case ('ellipse') {
+          <svg:ellipse
+            [attr.cx]="attrs['cx']"
+            [attr.cy]="attrs['cy']"
+            [attr.rx]="attrs['rx']"
+            [attr.ry]="attrs['ry']"
+          />
+        }
+      }
+    }
+  </svg>
+</span>

@@ -1,0 +1,117 @@
+:host {
+  display: inline-block;
+  line-height: 1;
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Shapes */
+.shape-circle {
+  border-radius: 9999px;
+}
+.shape-rounded {
+  border-radius: 0.5rem;
+}
+.shape-square {
+  border-radius: 0.25rem;
+}
+
+/* Sizes */
+.size-xs {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.625rem;
+}
+.size-sm {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.75rem;
+}
+.size-md {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+.size-lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.125rem;
+}
+.size-xl {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.375rem;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background-color: var(--primary-soft);
+  color: var(--primary-strong);
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+:host-context(.dark) .avatar-placeholder {
+  color: var(--primary);
+}
+
+.avatar-initials {
+  line-height: 1;
+}
+
+/* Status dots */
+.avatar-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: block;
+  border-radius: 9999px;
+  border: 2px solid var(--surface-raised);
+}
+
+.size-xs .avatar-status {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.size-sm .avatar-status,
+.size-md .avatar-status {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+.size-lg .avatar-status,
+.size-xl .avatar-status {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.status-online {
+  background-color: var(--success-fg);
+}
+.status-offline {
+  background-color: var(--text-muted);
+}
+.status-busy {
+  background-color: var(--danger-fg);
+}
+.status-away {
+  background-color: var(--warning-fg);
+}

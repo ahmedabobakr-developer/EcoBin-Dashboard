@@ -1,0 +1,116 @@
+:host {
+  display: block;
+}
+
+.stat-card {
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--line));
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.stat-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.stat-icon-wrapper {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-wrapper.tone-green {
+  background-color: var(--brand-soft);
+  color: var(--brand);
+}
+
+.stat-icon-wrapper.tone-blue {
+  background-color: var(--info-bg);
+  color: var(--info-fg);
+}
+
+.stat-icon-wrapper.tone-purple {
+  background-color: var(--purple-bg);
+  color: var(--purple-fg);
+}
+
+.stat-icon-wrapper.tone-amber {
+  background-color: var(--warning-bg);
+  color: var(--warning-fg);
+}
+
+.stat-icon-wrapper.tone-red {
+  background-color: var(--danger-bg);
+  color: var(--danger-fg);
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-unit {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.stat-trend-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.trend-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-comparison {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.stat-description {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}

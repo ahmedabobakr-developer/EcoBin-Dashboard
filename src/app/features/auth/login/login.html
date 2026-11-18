@@ -1,0 +1,173 @@
+<div class="login-container">
+  @if (isSuspended()) {
+    <div class="login-notice-wrapper">
+      <app-notice
+        variant="danger"
+        title="Account suspended"
+        description="Your administrator account has been suspended. Please contact system support."
+      />
+    </div>
+  }
+
+  @if (isNotAdmin()) {
+    <div class="login-notice-wrapper">
+      <app-notice
+        variant="danger"
+        title="Administrators only"
+        description="Access denied: Only system administrators can access this portal."
+      />
+    </div>
+  }
+
+  <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="login-form">
+    <!-- Email Field -->
+    <div class="form-group">
+      <app-input
+        label="Email address"
+        type="email"
+        placeholder="admin@example.com"
+        formControlName="email"
+        autocomplete="username"
+        [autofocus]="true"
+        leadingIcon="mail"
+        [required]="true"
+        [error]="emailServerError()"
+        (valueChange)="clearErrors()"
+      />
+    </div>
+
+    <!-- Password Field & Caps-Lock Detection -->
+    <div class="form-group password-group" (keydown)="checkCapsLock($event)" (keyup)="checkCapsLock($event)">
+      <app-input
+        label="Password"
+        type="password"
+        placeholder="••••••••"
+        formControlName="password"
+        autocomplete="current-password"
+        leadingIcon="lock"
+        [(showPassword)]="showPassword"
+        [required]="true"
+        [error]="passwordServerError()"
+        (valueChange)="clearErrors()"
+      />
+
+      @if (capsLockActive()) {
+        <div class="caps-lock-hint" role="status" aria-live="polite">
+          <app-icon name="alert-circle" size="xs" />
+          <span>Caps Lock is on</span>
+        </div>
+      }
+
+      <div class="forgot-link-row">
+        <button
+          type="button"
+          class="forgot-password-link"
+          (click)="openForgotPassword()"
+        >
+          Forgot password?
+        </button>
+      </div>
+    </div>
+
+    <!-- Reserved Error Banner Slot (No layout shift) -->
+    <div class="error-banner-slot">
+      @if (invalidCredentials()) {
+        <div class="login-error-banner" role="alert">
+          <app-icon name="alert-circle" size="sm" />
+          <span>Invalid email or password. Please try again.</span>
+        </div>
+      }
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-row">
+      <app-button
+        type="submit"
+        variant="primary"
+        size="lg"
+        [loading]="isLoading()"
+        [disabled]="isLoading()"
+        [fullWidth]="true"
+      >
+        Sign in
+      </app-button>
+    </div>
+  </form>
+
+  <!-- Mock Backend Credentials Helper (Tree-shaken in production) -->
+  @if (isMockBackend && mockCredentials) {
+    <div class="mock-backend-card">
+      <div class="mock-chip-header">
+        <div class="mock-tag-group">
+          <span class="mock-chip-badge">Mock backend</span>
+          <span class="mock-chip-creds">{{ mockCredentials.email }}</span>
+        </div>
+        <button
+          type="button"
+          class="mock-fill-btn"
+          (click)="fillMockCredentials()"
+          aria-label="Auto-fill seeded admin credentials"
+        >
+          Fill
+        </button>
+      </div>
+      <p class="mock-test-note">
+        Any valid email signs in. Use <code>{{ prototypeErrorKeyword }}</code> to preview error state.
+      </p>
+    </div>
+  }
+
+  <!-- Forgot Password Dialog Modal -->
+  <app-modal
+    [open]="isForgotPasswordOpen()"
+    title="Reset password"
+    [description]="forgotSubmitted() ? '' : 'Enter your administrator email to receive password reset instructions.'"
+    (closed)="closeForgotPassword()"
+  >
+    @if (forgotSubmitted()) {
+      <div class="forgot-success">
+        <app-notice
+          variant="success"
+          title="Check your inbox"
+          description="If an account exists with that email address, password reset instructions have been sent."
+        />
+        <div modal-footer class="modal-footer-row">
+          <app-button variant="secondary" (clicked)="closeForgotPassword()">
+            Close
+          </app-button>
+        </div>
+      </div>
+    } @else {
+      <form [formGroup]="forgotForm" (ngSubmit)="submitForgotPassword()" class="forgot-form">
+        <app-input
+          label="Email address"
+          type="email"
+          placeholder="admin@example.com"
+          formControlName="email"
+          autocomplete="email"
+          leadingIcon="mail"
+          [required]="true"
+          [error]="forgotEmailError()"
+        />
+
+        <div modal-footer class="modal-footer-row">
+          <app-button
+            variant="secondary"
+            (clicked)="closeForgotPassword()"
+            [disabled]="isForgotLoading()"
+          >
+            Cancel
+          </app-button>
+          <app-button
+            type="submit"
+            variant="primary"
+            [loading]="isForgotLoading()"
+            [disabled]="isForgotLoading()"
+          >
+            Send instructions
+          </app-button>
+        </div>
+      </form>
+    }
+  </app-modal>
+</div>

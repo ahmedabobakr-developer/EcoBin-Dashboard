@@ -1,0 +1,47 @@
+<app-form-field
+  [label]="compact() ? '' : label()"
+  [forId]="id()"
+  [required]="required()"
+  [hint]="compact() ? '' : hint()"
+  [error]="effectiveError()"
+  [disabled]="internalDisabled()"
+>
+  <div
+    class="select-wrapper"
+    [class.is-compact]="compact()"
+    [class.has-error]="!!effectiveError()"
+    [class.is-disabled]="internalDisabled()"
+  >
+    <select
+      [id]="id()"
+      [value]="internalValue()"
+      [disabled]="internalDisabled()"
+      [required]="required()"
+      [attr.aria-label]="effectiveAriaLabel()"
+      [attr.aria-describedby]="effectiveError() ? (id() + '-error') : (hint() ? (id() + '-hint') : null)"
+      [attr.aria-invalid]="!!effectiveError()"
+      (change)="handleChange($event)"
+      (blur)="handleBlur()"
+      class="select-field"
+    >
+      @if (placeholder() && !hasEmptyOption()) {
+        <option
+          value=""
+          [disabled]="!isEmptyAllowed()"
+          [selected]="internalValue() === '' || internalValue() === null || internalValue() === undefined"
+        >
+          {{ placeholder() }}
+        </option>
+      }
+      @for (opt of options(); track opt.value) {
+        <option [value]="opt.value" [disabled]="opt.disabled" [selected]="opt.value === internalValue()">
+          {{ opt.label }}
+        </option>
+      }
+    </select>
+
+    <div class="select-chevron" aria-hidden="true">
+      <app-icon name="chevron-down" size="sm" />
+    </div>
+  </div>
+</app-form-field>

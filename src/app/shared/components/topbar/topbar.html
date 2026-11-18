@@ -1,0 +1,102 @@
+<header class="topbar-root">
+  <!-- Left: Mobile Sidebar Toggle + Search -->
+  <div class="topbar-start">
+    <button
+      type="button"
+      class="mobile-menu-btn"
+      aria-label="Toggle navigation menu"
+      (click)="handleToggleSidebar()"
+    >
+      <app-icon name="menu" size="md" />
+    </button>
+
+    @if (showSearch()) {
+      <div class="topbar-search">
+        <app-search-input
+          [placeholder]="searchPlaceholder()"
+          size="sm"
+          (search)="handleSearch($event)"
+          (valueChange)="handleSearchChange($event)"
+        />
+      </div>
+    }
+  </div>
+
+  <!-- Right: Theme Toggle, Notifications Bell, User Block -->
+  <div class="topbar-end">
+    <button
+      type="button"
+      class="topbar-action-btn theme-toggle"
+      [appTooltip]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      tooltipPosition="bottom"
+      [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      (click)="toggleTheme()"
+    >
+      <app-icon [name]="isDarkMode() ? 'sun' : 'moon'" size="sm" />
+    </button>
+
+    <div #notifWrapper class="notif-wrapper">
+      <button
+        type="button"
+        class="topbar-action-btn notif-btn"
+        appTooltip="Notifications"
+        tooltipPosition="bottom"
+        [attr.aria-label]="notifAriaLabel()"
+        [attr.aria-expanded]="notificationsOpen()"
+        (click)="handleNotification()"
+      >
+        <app-icon name="bell" size="sm" />
+        @if (unreadNotifications() > 0) {
+          <span class="notif-badge">
+            {{ unreadNotifications() > 9 ? '9+' : unreadNotifications() }}
+          </span>
+        }
+      </button>
+
+      @if (notificationsOpen()) {
+        <div class="notif-popover fade-up">
+          <app-notifications-panel
+            [items]="notifications()"
+            (itemClicked)="notificationItemClicked.emit($event); notificationsOpen.set(false)"
+            (markAllRead)="notificationsMarkAllRead.emit()"
+          />
+        </div>
+      }
+    </div>
+
+    <app-dropdown-menu
+      [items]="userMenuItems()"
+      [headerTitle]="userName()"
+      [headerSubtitle]="userRole()"
+      align="end"
+      ariaLabel="User menu"
+      (openedChange)="handleMenuOpened($event)"
+      (itemSelected)="selectMenuItem($event)"
+    >
+      <button
+        menu-trigger
+        type="button"
+        class="user-trigger-btn"
+        aria-haspopup="menu"
+        [attr.aria-expanded]="userMenuOpen()"
+      >
+        <app-avatar
+          aria-hidden="true"
+          [name]="userName() || 'User'"
+          [imageUrl]="userAvatar()"
+          size="sm"
+        />
+        @if (userName() || userRole()) {
+          <span class="user-meta">
+            @if (userName()) {
+              <span class="user-display-name">{{ userName() }}</span>
+            }
+            @if (userRole()) {
+              <span class="user-display-role">{{ userRole() }}</span>
+            }
+          </span>
+        }
+      </button>
+    </app-dropdown-menu>
+  </div>
+</header>
