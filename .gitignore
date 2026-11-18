@@ -53,7 +53,6 @@ Thumbs.db
 /e2e/
 /docs
 
-# Runtime configuration with Google Maps API key (never commit real keys)
-/public/config.json
+
 
 

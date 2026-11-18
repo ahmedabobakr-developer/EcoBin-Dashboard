@@ -4,8 +4,8 @@ export type { Environment } from './environment.model';
 export const environment: Environment = {
   production: true,
   apiBaseUrl: '/api/v1',
-  useMockBackend: false,
-  mockLatencyMs: 0,
+  useMockBackend: true,
+  mockLatencyMs: 400,
   mockAccessTokenTtlSeconds: 900,
   mockRefreshTokenTtlDays: 7,
   sessionStorageKey: 'ecobin_admin_session',
@@ -13,7 +13,7 @@ export const environment: Environment = {
   manualAdjustmentMaxPoints: 10000,
   appVersion: '1.0.0',
   e2e: false,
-  mockBinCount: undefined,
+  mockBinCount: 23,
   mockLiveDrift: false,
   mockXssBinSeed: false,
 };
